@@ -1,0 +1,14 @@
+html, body {
+  height: 100vh;
+}
+
+footer {
+  background: #111;
+  padding-block: 20px;
+  color: #ddd;
+}
+
+footer * {
+  padding: 0;
+  margin: 0;
+}

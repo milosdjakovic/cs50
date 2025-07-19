@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Edit
+{% endblock %}
+
+{% block main %}
+<div class="d-flex flex-row justify-content-between align-items-center mb-4">
+  <h1 class="text-start m-0">Edit Note</h1>
+
+  <a href="/notes/view/{{ note.id }}" class="btn btn-primary">
+    <span class="d-flex align-items-center gap-1">
+      {%include 'icons/cancel.svg' %} Cancel
+    </span>
+  </a>
+</div>
+
+{% from "macros/_note_form.html" import note_form %}
+{{ note_form(form_action='/note/edit/' ~ note.id, title_value=note.title,
+content_value=note.content,
+submit_text='Modify') }}
+{% endblock %}

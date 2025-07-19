@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Apology
+{% endblock %}
+
+{% block main %}
+<!-- https://memegen.link/ -->
+<!-- https://knowyourmeme.com/memes/grumpy-cat -->
+<div class="d-flex flex-column gap-4 align-items-center">
+    <button class="btn btn-primary" onclick="history.back()">Go Back</button>
+    <img alt="{{ top }}" style="max-width: 500px;" class="border"
+        src="https://api.memegen.link/images/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?background=https://i.imgur.com/CsCgN7Ll.png&width=400"
+        title="{{ top }}">
+</div>
+{% endblock %}

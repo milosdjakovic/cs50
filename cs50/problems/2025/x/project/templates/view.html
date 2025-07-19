@@ -1,0 +1,263 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<style>
+  .markdown-content {
+    font-family: var(--bs-body-font-family);
+    line-height: 1.6;
+  }
+
+  .markdown-content h1 {
+    font-size: 2.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .markdown-content h2 {
+    font-size: 2rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .markdown-content h3 {
+    font-size: 1.75rem;
+    margin-top: 1.6rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .markdown-content h4 {
+    font-size: 1.5rem;
+    margin-top: 1.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .markdown-content h5 {
+    font-size: 1.25rem;
+    margin-top: 1.2rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .markdown-content h6 {
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .markdown-content p {
+    margin-bottom: 1rem;
+  }
+
+  .markdown-content ul,
+  .markdown-content ol {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+  }
+
+  .markdown-content pre {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+  }
+
+  .markdown-content code {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.2rem;
+    font-size: 0.875em;
+  }
+
+  .markdown-content pre code {
+    background-color: transparent;
+    padding: 0;
+    font-size: 0.9em;
+  }
+
+  .markdown-content blockquote {
+    border-left: 4px solid #dee2e6;
+    padding: 0.5rem 1rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+  }
+
+  .markdown-content img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+  }
+
+  .markdown-content table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+  }
+
+  .markdown-content table th,
+  .markdown-content table td {
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+  }
+
+  .markdown-content table th {
+    background-color: #f8f9fa;
+  }
+
+  .markdown-content>*:first-child {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .markdown-content>*:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+</style>
+{% endblock %}
+
+
+{% block title %}
+{{ note.title }}
+{% endblock %}
+
+{% block main %}
+<div class="d-flex flex-row justify-content-between align-items-center gap-4">
+  <h1 class="m-0">{{ note.title }}</h1>
+
+  <div class="d-flex gap-2">
+    {% if trashed %}
+    <a href="/note/restore/{{ note.id }}" class="btn btn-success">
+      <span class="d-flex align-items-center gap-2">
+        {%include 'icons/restore.svg' %} Restore
+      </span>
+    </a>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteNoteModalDialog">
+      <span class="d-flex align-items-center gap-2">
+        {%include 'icons/trash.svg' %} Delete
+      </span>
+    </button>
+    <a href="/trash/" class="btn btn-primary">
+      <span class="d-flex align-items-center gap-2">
+        {%include 'icons/x.svg' %} Close
+      </span>
+    </a>
+    {% else %}
+    {% if favorited %}
+    <a href="/note/unfavorite/{{ note.id }}" class="btn btn-warning" type="submit">
+      <span class="d-flex align-items-center gap-2">
+        {%include 'icons/pin.svg' %} Unpin
+      </span>
+    </a>
+    {% else %}
+    <a href="/note/favorite/{{ note.id }}" class="btn btn-success" type="submit">
+      <span class="d-flex align-items-center gap-2">
+        {%include 'icons/pinned.svg' %} Pin
+      </span>
+    </a>
+    {% endif %}
+    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#trashNoteModalDialog">
+      <span class="d-flex align-items-center gap-2">
+        {%include 'icons/trash.svg' %} Trash
+      </span>
+    </button>
+    <a href="/note/edit/{{ note.id }}" class="btn btn-primary">
+      <span class="d-flex align-items-center gap-2">
+        {%include 'icons/edit.svg' %} Edit
+      </span>
+    </a>
+    <a href="/notes/" class="btn btn-primary">
+      <span class="d-flex align-items-center gap-2">
+        {%include 'icons/x.svg' %} Close
+      </span>
+    </a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row mt-4 text-start">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body markdown-content">
+        {{ note.content|markdown|safe }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex mt-2 flex-row justify-content-end align-items-center gap-4">
+  <span class="text-muted">
+    <span class="fw-semibold">Created:</span> {{ note.created_at }}
+  </span>
+  <span class="text-muted">
+    <span class="fw-semibold">Updated:</span> {{ note.updated_at }}
+  </span>
+</div>
+
+<!-- Trash Note Modal -->
+<div class="modal fade" id="trashNoteModalDialog" tabindex="-1" aria-labelledby="trashNoteModalDialogLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action="/trash/" method="POST">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="trashNoteModalDialogLabel">Move to Trash</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="id" value="{{ note.id }}" hidden>
+          <p class="mb-0 text-start">Are you sure you want to move <span class="fw-bolder">{{ note.title }}</span> note
+            to
+            trash?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <span class="d-flex align-items-center gap-2">
+              {%include 'icons/cancel.svg' %} Cancel
+            </span>
+          </button>
+          <button type="submit" class="btn btn-warning">
+            <span class="d-flex align-items-center gap-2">
+              {%include 'icons/trash.svg' %} Trash
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Note Modal -->
+<div class="modal fade" id="deleteNoteModalDialog" tabindex="-1" aria-labelledby="deleteNoteModalDialogLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-start">
+      <form action="/note/delete/" method="POST">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteNoteModalDialogLabel">Delete Note</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="id" value="{{ note.id }}" hidden>
+          <p class="mb-0 text-start">Are you sure you want to delete <span class="fw-bolder">{{ note.title }}</span>
+            note?</p>
+          <div class="alert alert-danger mt-2" role="alert">
+            This action can't be undone. The note will be permanently deleted.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <span class="d-flex align-items-center gap-2">
+              {%include 'icons/cancel.svg' %} Cancel
+            </span>
+          </button>
+          <button type="submit" class="btn btn-danger">
+            <span class="d-flex align-items-center gap-2">
+              {%include 'icons/trash.svg' %} Delete
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

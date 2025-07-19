@@ -1,0 +1,30 @@
+Q: If songs.db contains the top 100 songs of one listener from 2018, how would you characterize
+their audio aura?
+
+A: I would characterize the audio aura of these 100 songs as "steady and groovy."
+I reached this conclusion by first using Python with the cs50 library's SQL functionality to
+retrieve the minimum, maximum, and average values for the energy, valence, and danceability
+features from the songs table. Then, using Python code, I calculated where the average fell
+within the range in the following way:
+
+1. Span = Maximum Property Value - Minimum Property Value
+2. Difference from Low = Average Property Value - Minimum Property Value
+3. Percentage = (Difference from Low / Span) * 100
+
+The resulting percentages were:
+- Danceability: approximately 65%
+- Energy: approximately 59%
+- Valence: approximately 48%
+
+Higher danceability, moderate valence, and energy somewhere in between the two led me to
+characterize the audio aura as "steady and groovy."
+
+---
+
+Q: Hypothesize about why the way you’ve calculated this aura might not be very representative
+of the listener. What better ways of calculating this aura would you propose?
+
+A: Approach with calculating averages like I did might mask if the user's top 100 songs can
+hold values each closer to MIN or MAX value instead of AVG. Additional properties lile tempo
+loudness, speechiness could be used. Maybe out of 100, the listener is playing his 20 favourites
+much more frequently than the rest so we could count the play times for each song.

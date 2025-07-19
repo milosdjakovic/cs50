@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block main %}
+<h1 class="text-center">My Profile</h1>
+
+<form action="/user/change-username/" method="post" style="max-width: 500px;"
+  class="d-flex flex-column gap-3 mx-auto w-100 mt-3">
+  <input class="form-control w-100" name="new-username" placeholder="Enter your username" type="text"
+    value="{{ user.username | capitalize }}" autocomplete="off">
+
+  <button class="btn btn-primary" type="submit">Change Username</button>
+</form>
+
+<form action="/change-password" method="post" style="max-width: 500px;"
+  class="d-flex flex-column gap-3 mx-auto w-100 mt-5">
+  <input class="form-control w-100" name="new-password" placeholder="Enter new password" type="password">
+  <input class="form-control w-100" name="repeated-new-password" placeholder="Repeat new password" type="password">
+  <button class="btn btn-primary" type="submit">Change Password</button>
+</form>
+
+<form action="/user/change-security-question" method="post" style="max-width: 500px;"
+  class="d-flex flex-column gap-3 mx-auto w-100 mt-5">
+  <select class="form-select mt-4" aria-label="Default select example" name="new-security-question">
+    <option selected disabled value="">Select question...</option>
+    {% for question in security_questions %}
+    <option value="{{ question.id }}">{{ question.question }}</option>
+    {% endfor %}
+  </select>
+  <input class="form-control w-100" name="new-security-answer" placeholder="Your answer" type="text" autocomplete="off">
+  <button class="btn btn-primary" type="submit">Change Security Answer</button>
+</form>
+
+<div style="max-width: 500px;" class="d-flex flex-column gap-3 mx-auto w-100 mt-5">
+  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModalDialog">
+    <span class="d-flex justify-content-center gap-2">
+      {%include 'icons/trash.svg' %} Delete Account
+    </span>
+  </button>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModalDialog" tabindex="-1" aria-labelledby="deleteAccountModalDialogLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-start">
+      <form action="/user/delete-account" method="POST">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteAccountModalDialogLabel">Delete Account</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-0 text-start">Are you sure you want to delete youraccount?</p>
+          <div class="alert alert-danger mt-2" role="alert">
+            This action can't be undone. The account will be permanently deleted.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <span class="d-flex align-items-center gap-2">
+              {%include 'icons/cancel.svg' %} Cancel
+            </span>
+          </button>
+          <button type="submit" class="btn btn-danger">
+            <span class="d-flex align-items-center gap-2">
+              {%include 'icons/trash.svg' %} Delete
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

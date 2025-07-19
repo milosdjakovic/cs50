@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block main %}
+<div style="margin-top: -12%;" class="flex-grow-1 d-flex flex-column justify-content-center align-items-center gap-3">
+  <h1 class="text-center">Register</h1>
+  <form action="/register" method="post" style="max-width: 500px;" class="d-flex flex-column gap-3 mx-auto w-100">
+    <input autocomplete="off" autofocus class="form-control w-100" name="username" placeholder="Username" type="text">
+    <input class="form-control w-100" name="password" placeholder="Password" type="password">
+    <input class="form-control w-100" name="confirmation" placeholder="Repeat password" type="password">
+
+    <select class="form-select mt-4" aria-label="Default select example" name="security-question">
+      <option selected disabled value="">Select question...</option>
+      {% for question in security_questions %}
+      <option value="{{ question.id }}">{{ question.question }}</option>
+      {% endfor %}
+    </select>
+    <input class="form-control w-100" name="security-answer" placeholder="Your answer" type="text" autocomplete="off">
+
+    <button class="btn btn-primary mt-4" type="submit">
+      <span class="d-flex align-items-center justify-content-center gap-2">
+        {%include 'icons/user-plus.svg' %} Register
+      </span>
+    </button>
+  </form>
+</div>
+{% endblock %}

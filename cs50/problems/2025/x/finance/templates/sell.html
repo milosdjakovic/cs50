@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Sell
+{% endblock %}
+
+{% block main %}
+
+<form action="/sell" method="post">
+  <select id="sell-form_select-symbol-input" class="form-select mx-auto w-auto mb-3" name="symbol" {% if not selected_symbol %}autofocus{% endif %}>
+    <option {% if not selected_symbol %}selected{% endif %} disabled value="">Choose...</option>
+    {% for available_symbol in available_symbols %}
+    <option value="{{ available_symbol }}" {% if available_symbol==selected_symbol %}selected{% endif %}>
+      {{ available_symbol }}
+    </option>
+    {% endfor %}
+  </select>
+
+  <p id="sell-form_spinner" class="d-none">Loading...</p>
+  <p id="sell-form_available_shares" class="d-none">Avaliable <span></span> shares: <span></span></p>
+
+  <div class="mb-3">
+    <input class="form-control mx-auto w-auto" name="shares" placeholder="Number of shares" type="text"
+      autocomplete="off" {% if selected_symbol %}autofocus{% endif %}>
+  </div>
+  <button class="btn btn-primary" type="submit">Sell</button>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", main)
+
+  async function main() {
+    const symbolInput = document.getElementById("sell-form_select-symbol-input")
+    symbolInput.addEventListener("change", (event) => updateShares(event.target.value))
+    initialize(symbolInput.value)
+    console.log()
+  }
+
+  function initialize(value) {
+    if (!value) return
+    if (value == "") return
+    updateShares(value)
+  }
+
+  async function updateShares(symbol) {
+    const availableShares = document.getElementById("sell-form_available_shares");
+    const spans = availableShares.getElementsByTagName("span")
+    const spinner = document.getElementById("sell-form_spinner")
+
+    availableShares.classList.add('d-none')
+    spinner.classList.remove('d-none')
+    const shares = await fetchShares(symbol)
+    spinner.classList.add('d-none')
+
+    spans[0].textContent = shares[0]["symbol"]
+    spans[1].textContent = shares[0]["total_shares"]
+    availableShares.classList.remove('d-none')
+  }
+
+  async function fetchShares(symbol) {
+    const response = await fetch(`/shares?symbol=${symbol}`)
+    const results = await response.json()
+    return results
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Log In
+{% endblock %}
+
+{% block main %}
+<div style="margin-top: -12%;" class="flex-grow-1 d-flex flex-column justify-content-center align-items-center gap-3">
+    <h1 class="text-center">Log In</h1>
+
+    <form action="/login" method="post" style="max-width: 500px;" class="d-flex flex-column gap-3 mx-auto w-100">
+        <input autocomplete="off" autofocus class="form-control w-100" name="username" placeholder="Username"
+            type="text">
+        <input class="form-control w-100" name="password" placeholder="Password" type="password">
+        <button class="btn btn-primary" type="submit">
+            <span class="d-flex align-items-center justify-content-center gap-2">
+                {%include 'icons/login.svg' %} Log In
+            </span>
+        </button>
+    </form>
+</div>
+{% endblock %}

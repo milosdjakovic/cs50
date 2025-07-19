@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Notes
+{% endblock %}
+
+{% block main %}
+<div class="d-flex flex-row justify-content-between align-items-center">
+  <h1>Notes</h1>
+
+  <a href="/note/new" class="btn btn-success" type="submit">
+    <span class="d-flex align-items-center gap-2">
+      {%include 'icons/plus.svg' %} New Note
+    </span>
+  </a>
+</div>
+
+{% if favorites %}
+<h4 class="text-start mt-4">Pinned</h4>
+
+<ul id="favoritesList" class="list-group mt-2">
+  {% for favorite in favorites %}
+  <li style="cursor: pointer" class="list-group-item list-group-item-action">
+    <div class="d-flex justify-content-between gap-4">
+      <div class="d-flex flex-grow-1 gap-4 align-items-center justify-content-between overflow-hidden">
+        <p style="max-width: 200px;" class="m-0 fw-semibold fs-5 text-truncate">{{ favorite.title }}</p>
+        <p class="m-0 text-muted text-truncate">{{ favorite.updated_at }}</p>
+      </div>
+
+      <div class="d-flex gap-2">
+        <a href="/notes/view/{{ favorite.id }}" class="btn btn-secondary view-note-link">
+          <span class="d-flex align-items-center gap-2">
+            {%include 'icons/eye.svg' %} View
+          </span>
+        </a>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+<div class="mt-4"></div>
+<div class="mt-4"></div>
+{% endif %}
+
+
+
+{% if notes %}
+{% if favorites %}
+<h4 class="text-start mt-4">...</h4>
+{% endif %}
+<ul id="notesList" class="list-group mt-2">
+  {% for note in notes %}
+  <li style="cursor: pointer" class="list-group-item list-group-item-action">
+    <div class="d-flex justify-content-between gap-4">
+      <div class="d-flex flex-grow-1 gap-4 align-items-center justify-content-between overflow-hidden">
+        <p style="max-width: 200px;" class="m-0 fw-semibold fs-5 text-truncate">{{ note.title }}</p>
+        <p class="m-0 text-muted text-truncate">{{ note.updated_at }}</p>
+      </div>
+
+      <div class="d-flex gap-2">
+        <a href="/notes/view/{{ note.id }}" class="btn btn-secondary view-note-link">
+          <span class="d-flex align-items-center gap-2">
+            {%include 'icons/eye.svg' %} View
+          </span>
+        </a>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="mt-4">No notes available.</p>
+{% endif %}
+</div>
+
+<script>
+
+
+  function addClickListenerToList(listId) {
+    const list = document.getElementById(listId);
+    if (list) {
+      list.addEventListener('click', event => {
+        const target = event.target.closest('.list-group-item');
+        if (target) {
+          const notePath = target.querySelector('.view-note-link').getAttribute('href');
+
+          window.location.href = notePath;
+        }
+      });
+    }
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    const lists = [
+      'notesList',
+      'favoritesList'
+    ];
+
+    for (const list of lists) {
+      addClickListenerToList(list);
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let answers = {
+                    1: 'Mitochondria',
+                    2: 'mars'
+                }
+
+                function checkAnswerSection1(event) {
+                    resetSection1Buttons()
+                    let element = event.target
+                    let answer = element.textContent
+
+                    if (answer === answers[1]) {
+                        element.style.backgroundColor = '#44cc44';
+                        printResultSection1("Correct")
+                        return
+                    }
+
+                    element.style.backgroundColor = '#ee4444';
+                    printResultSection1("Incorrect")
+                }
+
+                function resetSection1Buttons() {
+                    let btns = document.querySelectorAll('.section-1-btn')
+
+                    for (let btn of btns) {
+                        btn.style.backgroundColor = '#d9edff'
+                    }
+                }
+
+                function printResultSection1(result) {
+                    let resultElement = document.querySelector('#section-1-result')
+                    resultElement.textContent = result
+                }
+
+
+                let form = document.getElementById('section-2-form');
+
+
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    let inputField = document.getElementById('section-2-answer-input');
+                    let answer = inputField.value.toLowerCase();
+
+                    if (answer === answers[2]) {
+                        printResultSection2("Correct")
+                        inputField.style.color = '#44cc44';
+                        return
+                    }
+
+                    printResultSection2("Incorrect")
+                    inputField.style.color = '#ee4444';
+                });
+
+                function printResultSection2(result) {
+                    let resultElement = document.querySelector('#section-2-result')
+                    resultElement.textContent = result
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <h3>What is the powerhouse of the cell?</h3>
+                <button class="section-1-btn" onclick="checkAnswerSection1(event)">Nucleus</button>
+                <button class="section-1-btn" onclick="checkAnswerSection1(event)">Mitochondria</button>
+                <button class="section-1-btn" onclick="checkAnswerSection1(event)">Ribosome</button>
+                <button class="section-1-btn" onclick="checkAnswerSection1(event)">Cytoplasm</button>
+                <p id="section-1-result"></p>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <h3>Which planet in our solar system is known as the "Red Planet"?</h3>
+                <form id="section-2-form">
+                    <input id="section-2-answer-input" type="text" name="Type your answer">
+                    <input type="submit" value="Check Answer">
+                </form>
+                <p id="section-2-result"></p>
+            </div>
+        </div>
+    </body>
+</html>

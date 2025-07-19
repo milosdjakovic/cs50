@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Status
+{% endblock %}
+
+{% block main %}
+
+{% if purchases %}
+<table class="table">
+  <tbody>
+    <tr>
+      <td class="text-start fw-bolder">Shares value</td>
+      <td class="text-end">{{ shares_value | usd }}</td>
+    </tr>
+    <tr>
+      <td class="text-start fw-bolder">Cash</td>
+      <td class="text-end">{{ session_user.cash | usd }}</td>
+    </tr>
+    <tr>
+      <td class="text-start fw-bolder">Total</td>
+      <td class="text-end">{{ total | usd }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col" class="text-start">Symbol</th>
+      <th scope="col" class="text-end">Shares</th>
+      <th scope="col" class="text-end">Price</th>
+      <th scope="col" class="text-end">Total</th>
+      <th scope="col" class="text-end"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for stock in purchases %}
+    <tr>
+      <th class="text-start">{{ stock.symbol }}</th>
+      <td class="text-end">{{ stock.shares }}</td>
+      <td class="text-end">{{ stock.price | usd }}</td>
+      <td class="text-end">{{ (stock.shares * stock.price) | usd }}</td>
+      <td class="text-end"><a href="/sell?symbol={{ stock.symbol }}">Sell</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+
+{% endblock %}

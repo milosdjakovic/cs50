@@ -1,0 +1,27 @@
+{% macro note_form(form_action='', title_value='', content_value='', submit_text='Create') %}
+{#
+Renders a note form.
+
+Args:
+form_action (str): The URL the form submits to. Defaults to empty.
+title_value (str): Initial value for the title input. Defaults to empty.
+content_value (str): Initial value for the content textarea. Defaults to empty.
+submit_text (str): Text for the submit button. Defaults to 'Create'.
+#}
+<form action="{{ form_action }}" method="post" class="d-flex flex-column gap-4 flex-grow-1">
+  <div class="">
+    <input autocomplete="off" autofocus class="form-control" name="title" placeholder="Title" type="text"
+      value="{{ title_value }}">
+  </div>
+
+  <div class="flex-grow-1 d-flex font-monospace">
+    <div class="form-floating flex-grow-1">
+      <textarea class="form-control h-100" placeholder="Note contents" id="contentTextArea"
+        name="content">{{ content_value }}</textarea>
+      <label for="contentTextArea">Content (Markdown)</label>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" type="submit">{{ submit_text }}</button>
+</form>
+{% endmacro %}

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Quoted
+{% endblock %}
+
+{% block main %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col" class="text-start">Symbol</th>
+      <th scope="col" class="text-start">Name</th>
+      <th scope="col" class="text-end">Price</th>
+      <th scope="col" class="text-end"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th class="text-start">{{ quote.symbol }}</th>
+      <td class="text-start">{{ quote.name }}</td>
+      <td class="text-end">{{ quote.price | usd }}</td>
+      <td><a href="/buy?symbol={{ quote.symbol }}">Buy</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<a class="btn btn-primary" href="/quote">Quote Another Stock</a>
+{% endblock %}

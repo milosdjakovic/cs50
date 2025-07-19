@@ -33,3 +33,16 @@ git branch -r | grep "^  origin/cs50/" | while read -r branch; do
 done
 
 echo "Extraction complete! Files are in $EXTRACTED_DIR"
+
+# Move extracted/cs50 to script directory, overwriting if exists
+if [ -d "$SCRIPT_DIR/cs50" ]; then
+    echo "Removing existing cs50 directory in $SCRIPT_DIR"
+    rm -rf "$SCRIPT_DIR/cs50"
+fi
+
+if [ -d "$EXTRACTED_DIR/cs50" ]; then
+    echo "Moving extracted/cs50 to $SCRIPT_DIR"
+    mv "$EXTRACTED_DIR/cs50" "$SCRIPT_DIR/"
+else
+    echo "No cs50 directory found in extracted."
+fi

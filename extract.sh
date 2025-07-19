@@ -46,3 +46,21 @@ if [ -d "$EXTRACTED_DIR/cs50" ]; then
 else
     echo "No cs50 directory found in extracted."
 fi
+
+echo ""
+echo "=============================================="
+echo "✅ Extraction and move complete!"
+echo "Extracted files are now in: $SCRIPT_DIR/cs50"
+echo "=============================================="
+echo ""
+
+read -p "Would you like to remove the cloned repo directory '$REPO_NAME'? [y/N]: " answer
+case "$answer" in
+    [yY][eE][sS]|[yY])
+        rm -rf "$SCRIPT_DIR/$REPO_NAME"
+        echo "Cloned repo directory '$REPO_NAME' has been removed."
+        ;;
+    *)
+        echo "Cloned repo directory '$REPO_NAME' has been kept."
+        ;;
+esac
